@@ -10,11 +10,12 @@ import (
 var (
 	flagQuotationMarks string
 	flagKeyPrefix      string
+	flagRawValue       bool
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s [ENVIRONMENT_NAME]:\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s [RAW_JSON or ENVIRONMENT_VARIATION_NAME]:\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
@@ -32,17 +33,21 @@ func init() {
 		"Specifies a prefix for each key in the output.",
 	)
 
+	flag.BoolVar(
+		&flagRawValue,
+		"raw-value",
+		false,
+		"Specifies that JSON was passed as an argument. So it is not necessary to specify an ENV as input.",
+	)
+
 	flag.Parse()
 }
 
 func main() {
-	var (
-		envName, envValue = retriveSourceEnv()
-		values            map[string]string
-	)
+	var values map[string]string
 
-	if err := json.Unmarshal([]byte(envValue), &values); err != nil {
-		fatalPrint(fmt.Sprintf("Can't json unmarshal value from %s: '%s'", envName, envValue))
+	if err := json.Unmarshal([]byte(retriveInputJson()), &values); err != nil {
+		fatalPrint(fmt.Sprintf("Can't unmarshal specified json : %s", err.Error()))
 	}
 
 	for key := range values {
@@ -57,18 +62,22 @@ func main() {
 	}
 }
 
-func retriveSourceEnv() (string, string) {
-	envName := flag.Arg(0)
-	if len(envName) < 1 {
-		fatalPrint(`The posicional argument "ENVIRONMENT_NAME" must be a non empty string.`)
+func retriveInputJson() string {
+	input := flag.Arg(0)
+	if len(input) < 1 {
+		fatalPrint(`The posicional argument "INPUT" must be a non empty string.`)
 	}
 
-	envValue := os.Getenv(envName)
+	if flagRawValue {
+		return input
+	}
+
+	envValue := os.Getenv(input)
 	if len(envValue) < 1 {
-		fatalPrint(`The positional argument "ENVIRONMENT_NAME" must reference an existing environment variable.`)
+		fatalPrint(`The positional argument "INPUT" must reference an existing environment variable name.`)
 	}
 
-	return envName, envValue
+	return envValue
 }
 
 func fatalPrint(msg string) {
