@@ -7,11 +7,22 @@ import (
 	"os"
 )
 
+var (
+	flagQuotationMarks string
+)
+
 func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s [ENVIRONMENT_NAME]:\n", os.Args[0])
 		flag.PrintDefaults()
 	}
+
+	flag.StringVar(
+		&flagQuotationMarks,
+		"quotation-marks",
+		"",
+		"Specifies a combination of characters to be placed before and after the ENV value in the output",
+	)
 
 	flag.Parse()
 }
@@ -27,7 +38,7 @@ func main() {
 	}
 
 	for key := range values {
-		fmt.Printf("%s=%s\n", key, values[key])
+		fmt.Printf("%s=%s%s%s\n", key, flagQuotationMarks, values[key], flagQuotationMarks)
 	}
 }
 
