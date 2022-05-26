@@ -9,6 +9,7 @@ import (
 
 var (
 	flagQuotationMarks string
+	flagKeyPrefix      string
 )
 
 func init() {
@@ -21,7 +22,14 @@ func init() {
 		&flagQuotationMarks,
 		"quotation-marks",
 		"",
-		"Specifies a combination of characters to be placed before and after the ENV value in the output",
+		"Specifies a combination of characters to be placed before and after the ENV value in the output.",
+	)
+
+	flag.StringVar(
+		&flagKeyPrefix,
+		"key-prefix",
+		"",
+		"Specifies a prefix for each key in the output.",
 	)
 
 	flag.Parse()
@@ -38,7 +46,14 @@ func main() {
 	}
 
 	for key := range values {
-		fmt.Printf("%s=%s%s%s\n", key, flagQuotationMarks, values[key], flagQuotationMarks)
+		fmt.Printf(
+			"%s%s=%s%s%s\n",
+			flagKeyPrefix,
+			key,
+			flagQuotationMarks,
+			values[key],
+			flagQuotationMarks,
+		)
 	}
 }
 
