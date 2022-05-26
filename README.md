@@ -1,6 +1,16 @@
 # secretoenvs
 secretoenvs (pronounced "secret to envs") is a utility to convert an Environment Variable stored as JSON to key=value format (shell environment variables).
 
+## Contents
+ - [Motivation](#motivation)
+ - [Installing](#installing)
+ - [Use](#use)
+    - [Example of use](#example-of-use)
+        - [Basic](#basic)
+        - [Adding quotes to avoid interpreting values](#adding-quotes-to-avoid-interpreting-values)
+        - [Added prefix to avoid name conflicts with other ENVs](#added-prefix-to-avoid-name-conflicts-with-other-envs)
+        - [Passing the JSON without needing an intermediate ENV](#passing-the-json-without-needing-an-intermediate-env)
+
 ## Motivation
 In Amazon Web Service (AWS) Elastic Container Service (ECS) you can inject secret values stored in AWS Secrets Manager by specifying the following information in the container definition:
   - Accessible key name for the container
@@ -40,6 +50,21 @@ exec "php-fpm $@"
 ```
 
 With this, **we pre-process the ENV only when the container starts** and the values we are interested in are exposed to all PHP-FPM child processes and our sensitive values are not versioned in the docker image.
+
+## Installing
+There are two ways to install:
+
+Through `go install`
+```
+$ go install github.com/RafaelYon/secretoenvs@0.1.0
+```
+
+Or downloading a [pre-compiled version](https://github.com/RafaelYon/secretoenvs/releases/tag/0.1.0):
+```
+$ wget https://github.com/RafaelYon/secretoenvs/releases/download/0.1.0/secretoenvs_linux_amd64 -O ~/bin/secretoenvs
+```
+
+After getting a binary you can start using it.
 
 ## Use
 This utility has a basic explanation of the arguments and flags that can be specified:
