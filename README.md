@@ -43,12 +43,12 @@ There are two ways to install:
 
 Through `go install`
 ```sh
-go install github.com/RafaelYon/secretoenvs@0.2.0
+go install github.com/RafaelYon/secretoenvs@v0.2.0
 ```
 
-Or downloading a [pre-compiled version](https://github.com/RafaelYon/secretoenvs/releases/tag/0.1.0):
+Or downloading a [pre-compiled version](https://github.com/RafaelYon/secretoenvs/releases/tag/v0.2.0):
 ```sh
-wget https://github.com/RafaelYon/secretoenvs/releases/download/0.2.0/secretoenvs_linux_amd64 -O ~/bin/secretoenvs
+wget https://github.com/RafaelYon/secretoenvs/releases/download/v0.2.0/secretoenvs_linux_amd64 -O ~/bin/secretoenvs
 ```
 
 After getting a binary you can start using it.
