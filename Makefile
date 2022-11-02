@@ -1,27 +1,25 @@
 # Go supported OSs and Archs: https://github.com/golang/go/blob/master/src/go/build/syslist.go
 
-build: clear linux windows
+export CGO_ENABLED=0
 
-linux: setup
-	export GOOS=linux
+build: clear linux windows sha256results
 
-	GOARCH=386 go build -o build/secretoenvs_linux_386
-	GOARCH=amd64 go build -o build/secretoenvs_linux_amd64
+linux:
+	GOOS=linux GOARCH=386 go build -o build/secretoenvs_linux_386
+	GOOS=linux GOARCH=amd64 go build -o build/secretoenvs_linux_amd64
 
-	GOARCH=arm go build -o build/secretoenvs_linux_arm
-	GOARCH=arm64 go build -o build/secretoenvs_linux_arm64
+	GOOS=linux GOARCH=arm go build -o build/secretoenvs_linux_arm
+	GOOS=linux GOARCH=arm64 go build -o build/secretoenvs_linux_arm64
 
-windows: setup
-	export GOOS=windows
+windows:
+	GOOS=windows GOARCH=386 go build -o build/secretoenvs_windows_386.exe
+	GOOS=windows GOARCH=amd64 go build -o build/secretoenvs_windows_amd64.exe
 
-	GOARCH=386 go build -o build/secretoenvs_windows_386.exe
-	GOARCH=amd64 go build -o build/secretoenvs_windows_amd64.exe
-	
-	GOARCH=arm go build -o build/secretoenvs_windows_arm.exe
-	GOARCH=arm64 go build -o build/secretoenvs_windows_arm64.exe
+	GOOS=windows GOARCH=arm go build -o build/secretoenvs_windows_arm.exe
+	GOOS=windows GOARCH=arm64 go build -o build/secretoenvs_windows_arm64.exe
 
-setup:
-	export CGO_ENABLED=0
+sha256results:
+	cd build && sha256sum * > sha256sums.txt
 
 clear:
 	rm -rf build
