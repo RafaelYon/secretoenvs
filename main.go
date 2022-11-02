@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	flagQuotationMarks string
-	flagKeyPrefix      string
-	flagRawValue       bool
+	flagQuotationMarks    string
+	flagKeyPrefix         string
+	flagKeyValueSeparator string
+	flagRawValue          bool
 )
 
 func init() {
@@ -33,6 +34,13 @@ func init() {
 		"Specifies a prefix for each key in the output.",
 	)
 
+	flag.StringVar(
+		&flagKeyValueSeparator,
+		"key-value-separator",
+		"=",
+		"Specifies the characters to use to separate key values",
+	)
+
 	flag.BoolVar(
 		&flagRawValue,
 		"raw-value",
@@ -52,9 +60,10 @@ func main() {
 
 	for key := range values {
 		fmt.Printf(
-			"%s%s=%s%s%s\n",
+			"%s%s%s%s%s%s\n",
 			flagKeyPrefix,
 			key,
+			flagKeyValueSeparator,
 			flagQuotationMarks,
 			values[key],
 			flagQuotationMarks,
